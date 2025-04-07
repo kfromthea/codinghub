@@ -2,6 +2,9 @@
 
 **Avatar State** is a turn-based, anime-inspired fighter game developed in Python. Players create characters with elemental specialties and engage in strategic battles using a set of unique moves. The game features a command-line interface with randomized stats, move accuracy, and turn-based combat.
 
+![Avatar State Gameplay](https://media1.tenor.com/m/0vNmb6kqMJkAAAAC/korra-fight.gif)
+
+
 ## Features
 
 - **Two-Player Local Battles**: Engage in battles with a friend in a local multiplayer setup.
@@ -87,13 +90,6 @@ Battle: Contains the core game loop, managing turn-based combat and determining 
  Create a graphical user interface (GUI) using libraries such as tkinter or pygame.
 
  Implement functionality to save and load fighter data.
-
-Note: This game is inspired by elemental combat themes prevalent in various anime series. It is an independent project and is not affiliated with any specific anime franchise.
-
-pgsql
-Copy
-Edit
-
-This `README.md` provides a comprehensive overview of **Avatar State**, detailing its features, gameplay mechanics, setup instructions, and future development plans. It is structured to offer clarity and ease of navigation for users and contributors alike.
-::contentReference[oaicite:0]{index=0}
  
+---
+>Thank for checking this out, excited to expand on this!
