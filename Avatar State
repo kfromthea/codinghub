@@ -1,0 +1,190 @@
+"""Game based on a popular anime that allows:
+    - Game starts with 2 Fighters: name input required
+    - Each Fighter has a random amount of HP from 400 to 500
+    - Each Fighter has a Specialty Type (Fire, Water, Earth, Light, Dark): specialty type required
+    - Each Specialty Type has a weakness (Fire > Grass, Water > Fire, Grass, Water, Light > Dark, Dark < Light, else normal) (coming 1.1)
+    - Each Fighter has 4 Moves: each specialty has predetermined moves with predetermined damage amounts, add method that allows user
+        to check moves and damage output
+        - each move has a random percentage of accuracy once selected each turn
+    - Fighter Battle using their Moves.
+    - Battles are turn-based.
+    - When a Fighter reaches 0 HP, Fighter faints.
+"""
+import random
+import math
+import os
+import time
+
+class Fighter():
+    def __init__(self):
+        """Create your character by giving them a name!"""
+        self.user_name = input("Choose your character's name: ").capitalize()
+        self.hp = random.randint(450,500)
+        while True:
+            try:
+                confirm_name = input("Are you sure you want this name (Y/N)? ").capitalize()
+                if confirm_name == 'Y':
+                    print(f"\nGreat! {self.user_name} has been created with {self.hp} health points (HP). Now let's get into their specialty!\n")
+                    break
+            except Exception as e:
+                    print(f'An error occurred: {e}')
+            else:
+                print("Let's try that again.")
+                user_name = input("Choose your character's name: ").capitalize()
+                self.user_name = user_name
+
+class Specialty(Fighter):
+    """This defines the speciality your fighter will have!"""
+    def __init__(self):
+        super().__init__()
+        self.weaknesses = {'Fire':['Water', 'Light', 'Dark'],
+                    'Earth':['Air','Light','Dark'],
+                    'Air':['Fire','Light','Dark'],
+                    'Water':['Electric','Light','Dark'],
+                    'Electric':['Earth','Light','Dark'],
+                    'Dark':['Light'],
+                    'Light':['Dark']
+                           }
+        self.resistances = {'Light':['Fire','Water','Earth','Light'],
+                            'Dark':['Fire','Water','Earth','Dark'],
+                            }
+
+        while True:
+            try:
+                user_specialty = input("Enter your fighter's specialty: \nFire\nEarth\nWater\nAir\nElectric\nDark\nLight \nMy selection is... ").capitalize()
+                self.user_specialty = user_specialty
+                if user_specialty in self.weaknesses:
+                    print(f"\nGreat! Now that you chose {self.user_name}'s speciality power as {user_specialty}, "
+                          f"you should get to know your weaknesses as well: {self.weaknesses[user_specialty]}.")
+                    break
+            except Exception as e:
+                print(f'An error occurred: {e}')
+            else:
+                print('\nThat specialty is not in this world, please try again.\n')
+
+class Moves(Specialty):
+    def __init__(self):
+        super().__init__()
+        self.movelist = {
+            "Fire": {
+                "Fire Punch": {"Damage": 75},
+                "Flower Bomb": {"Damage": 90},
+                "Lighter Strike": {"Damage": 20},
+                "Dragon Snap": {"Damage": 150}
+            },
+            "Water": {
+                "Ice Spear": {"Damage": 75},
+                "Torrential Sphere": {"Damage": 90},
+                "Pipe Strike": {"Damage": 20},
+                "Torrential Wave": {"Damage": 150}
+            },
+            "Electric": {
+                "Static Pulse": {"Damage": 75},
+                "Lightning Grenade": {"Damage": 90},
+                "Carpet Shock": {"Damage": 20},
+                "Lightning Storm": {"Damage": 150}
+            },
+            "Air": {
+                "Sonicboom": {"Damage": 75},
+                "Air Tunnel": {"Damage": 90},
+                "Wind Gust": {"Damage": 20},
+                "Tornado": {"Damage": 150}
+            },
+            "Earth": {
+                "Stonehenge": {"Damage": 75},
+                "Meteor Strike": {"Damage": 90},
+                "Rock Sling": {"Damage": 20},
+                "Earthquake": {"Damage": 150}
+            },
+            "Dark": {
+                "Shadow Walk": {"Damage": 75},
+                "Bad Dreams": {"Damage": 90},
+                "Shade Cross": {"Damage": 20},
+                "Dark Palace": {"Damage": 150}
+            },
+            "Light": {
+                "Flash Capture": {"Damage": 75},
+                "Constellation": {"Damage": 90},
+                "Firefly": {"Damage": 20},
+                "Solar Flare": {"Damage": 150}
+            }
+}
+
+class PlayerSummary(Moves):
+    def __init__(self,player1,player2):
+        self.player1 = player1
+        self.player2 = player2
+        self.display_summary()
+
+    def display_summary(self):
+        for player in [self.player1,self.player2]:
+            print('\n\n-----Player Summaries-----')
+            print(f'Name: {player.user_name}\n'
+                  f'Starting HP: {player.hp}\n'
+                  f'Specialty: {player.user_specialty}\n'
+                  f'Weaknesses: {player.weaknesses[player.user_specialty]}\n'
+                  f'Moves:')
+            for move,stats in player.movelist[player.user_specialty].items():
+                print(f"{move} - Damage: {stats['Damage']}")
+
+class Battle(PlayerSummary):
+    def __init__(self,player1,player2):
+        self.player1 = player1
+        self.player2 = player2
+        self.player1.max_hp = self.player1.hp
+        self.player2.max_hp = self.player1.hp
+        self.start_battle()
+
+    def start_battle(self):
+        self.current_player = self.player1
+        self.opponent = self.player2
+        self.take_turns()
+
+    def take_turns(self):
+        while self.current_player.hp > 0 and self.opponent.hp > 0:
+            moves = list(self.current_player.movelist[self.current_player.user_specialty].items())
+            os.system('cls')
+            time.sleep(2)
+            print("\n...The battle commences...")
+            time.sleep(2)
+            os.system('cls')
+            print(f"\n-Turn: {self.current_player.user_name}- Current HP: {self.current_player.hp}\n")
+            print('Moves:')
+            for index, (move,stats) in enumerate(moves,1):
+                print(f"({index}) {move} (Damage: {stats['Damage']})")
+
+            while True:
+                try:
+                    choice = int(input('\nChoose your attack (number): '))
+                    selected_move = moves[choice - 1]
+                    print(f'You chose ** {selected_move[0]} ** against {self.opponent.user_name}!')
+                    break
+                except Exception as e:
+                    print(f'The following error was found: {e}')
+                    print('Please type a number (1 through 4) to make a move choice.')
+            damage = selected_move[1]['Damage']
+            chance = max(0.5, 1 - (damage / 100))
+            if random.random() <= chance:
+                self.opponent.hp -= damage
+                max_hp = self.opponent.max_hp
+                bar_length = 20
+                health_bar = "=" * (self.opponent.hp * bar_length // max_hp)
+                print(f"\n{self.opponent.user_name}'s HP: [{health_bar:<{bar_length}}] {self.opponent.hp}/{max_hp} HP")
+                if self.opponent.hp <=0:
+                    print(f"\nYou've hit {self.opponent.user_name} for {damage} damage and they have no HP left...")
+                    time.sleep(2)
+                    print(f"You've defeated {self.opponent.user_name}!")
+                    break
+                else:
+                    print(f"\nYou've hit {self.opponent.user_name} for {damage} damage and they have {self.opponent.hp} HP left!")
+            else:
+                print(f'\nYou missed, {self.opponent.user_name} took no damage!')
+            self.current_player,self.opponent = self.opponent,self.current_player
+
+
+print('Player 1 create your character...')
+player1 = Moves()
+print('\n\nPlayer 2 create your character...')
+player2 = Moves()
+summary = PlayerSummary(player1,player2)
+battle = Battle(player1,player2)
