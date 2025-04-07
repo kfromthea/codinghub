@@ -1,1 +1,4 @@
-Within this branch, you'll find all of my self-guided projects! Feel free to reach out to me at kpaul1795@gmail.com if you have any questions.
+👋 Hi, I’m Kevin based out of the Atlanta, GA, USA.
+👀 I’m interested in Data Analytics, more specifically in predictive analytics.
+🌱 I’m currently specializing in Python!
+📫 Feel free to send me a message!
