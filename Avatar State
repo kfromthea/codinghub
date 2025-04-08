@@ -143,8 +143,8 @@ class Battle(PlayerSummary):
     def take_turns(self):
         while self.current_player.hp > 0 and self.opponent.hp > 0:
             moves = list(self.current_player.movelist[self.current_player.user_specialty].items())
+            time.sleep(5)
             os.system('cls')
-            time.sleep(2)
             print("\n...The battle commences...")
             time.sleep(2)
             os.system('cls')
